@@ -1107,9 +1107,9 @@ QTableCornerButton::section:pressed {
            <property name="geometry">
             <rect>
              <x>20</x>
-             <y>380</y>
+             <y>300</y>
              <width>801</width>
-             <height>291</height>
+             <height>461</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3"/>
@@ -1117,9 +1117,9 @@ QTableCornerButton::section:pressed {
           <widget class="QLabel" name="label_19">
            <property name="geometry">
             <rect>
-             <x>340</x>
-             <y>330</y>
-             <width>231</width>
+             <x>300</x>
+             <y>260</y>
+             <width>261</width>
              <height>41</height>
             </rect>
            </property>
@@ -1251,7 +1251,7 @@ QTableCornerButton::section:pressed {
              <x>20</x>
              <y>60</y>
              <width>801</width>
-             <height>271</height>
+             <height>201</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -1287,6 +1287,19 @@ QTableCornerButton::section:pressed {
            </property>
            <property name="text">
             <string>绘图</string>
+           </property>
+          </widget>
+          <widget class="PushButton" name="PushButton_17">
+           <property name="geometry">
+            <rect>
+             <x>560</x>
+             <y>460</y>
+             <width>102</width>
+             <height>32</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>更新图片</string>
            </property>
           </widget>
          </widget>

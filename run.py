@@ -24,7 +24,7 @@ import re
 import dialog_pyqt
 from PyQt5.QtChart import QChart, QChartView, QLineSeries, QValueAxis
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
-import codecs
+import time
 
 ui, _ = loadUiType('test_pyqt5.ui')
 ui_dialog,_ = loadUiType('dialog_pyqt.ui')
@@ -71,7 +71,7 @@ class Mainapp(QMainWindow, ui):
         self.communication()
         self.dgl = Dlg_Widget()
         self.slider_set()
-        self.pre_weather()
+
 
     def slider_set(self):
         self.Slider_2.setMaximum(100)
@@ -117,6 +117,10 @@ class Mainapp(QMainWindow, ui):
 
         self.ComboBox_2.addItems(["北京","上海","长沙","南京"])
         self.ComboBox_2.setCurrentIndex(1)
+        self.pre_weather()
+        self.load_echarts()
+
+
 
 
 
@@ -140,9 +144,20 @@ class Mainapp(QMainWindow, ui):
         self.PushButton_41.clicked.connect(self.save_form)
         self.PushButton_14.clicked.connect(lambda: self.tabWidget.setCurrentIndex(6))
         self.ComboBox_2.currentTextChanged.connect(self.pre_weather)
+        self.ComboBox_2.currentTextChanged.connect(self.changeWeather)
         self.PushButton_15.clicked.connect(self.add_city)
         self.PushButton_16.clicked.connect(lambda : self.tabWidget.setCurrentIndex(7))
         self.PushButton_32.clicked.connect(self.pic_echart)
+        self.PushButton_17.clicked.connect(self.echarts_change)
+        # self.PushButton_18.clicked.connect(self.changeWeather)
+
+    #更新echarts绘图
+    def echarts_change(self):
+        if self.radar_view.page():
+            jscode = "showPiChart(300,300,300,300,300,300)"
+            self.radar_view.page().runJavaScript(jscode)
+
+
 
     #echart绘图
     def pic_echart(self):
@@ -151,18 +166,13 @@ class Mainapp(QMainWindow, ui):
         if self.verticalLayout_11.count()>0:
             self.verticalLayout_11.removeItem(self.verticalLayout_11.itemAt(0))
 
-        self.statusBar().showMessage("图像加载中...")
+        # self.statusBar().showMessage("图像加载中...")
         self.radar_view = QWebEngineView()
 
-        self.radar_view.load(QUrl("file:///"+"html/radar.html"))  # 注意格式，绝对路径 radar_layout.addWidget(radar_view)
-        jscode = "showLinechart(1200,1200,1200,1200,1200,1200,1200);"
-        # with codecs.open("radar.html", "r", "utf-8") as f:
-        #     html = f.read()
-        # # 读取html文件
-        #
-        # self.radar_view.setHtml(html)
-        jscode = "showLinechart(1200,1200,1200,1200,1200,1200,1200)"
-        self.radar_view.page().runJavaScript(jscode)
+        self.radar_view.load(QUrl("file:///"+"chart.html"))  # 注意格式，绝对路径 radar_layout.addWidget(radar_view)
+
+        # jscode = "showPiChart(1500,1500,1500,1500,1500,1500)"
+        # self.radar_view.page().runJavaScript(jscode)
 
         self.verticalLayout_11.addWidget(self.radar_view)
         self.statusBar().showMessage("图像加载完毕")
@@ -198,17 +208,18 @@ class Mainapp(QMainWindow, ui):
 
 
         result_data = []
-        high = []
-        low = []
-        date_forecast = []
+        self.high = []
+        self.low = []
+        self.date_forecast = []
         for row,items in enumerate(data["forecast"]):
             tmp = [items["ymd"],items["high"],items["low"],items["fx"],items["fl"],items["type"]]
-            date_forecast.append(items["ymd"])
-            high.append(float(re.findall("高温.(\d+).",items["high"])[0]))
-            low.append(float(re.findall("低温.(\d+).",items["low"])[0]))
+            self.date_forecast.append(items["ymd"])
+            self.high.append(float(re.findall("高温.(\d+).",items["high"])[0]))
+            self.low.append(float(re.findall("低温.(\d+).",items["low"])[0]))
             result_data.append(tmp)
         # print(result_data)
         # print(high,low)
+        # print(len(date_forecast),date_forecast)
 
         self.TableWidget_weather.setRowCount(len(result_data))
         self.TableWidget_weather.setColumnCount(len(result_data[0]))
@@ -225,48 +236,83 @@ class Mainapp(QMainWindow, ui):
             # self.TableWidget_weather.setItem(row,4,QWidgetItem(items["fl"]))
             # self.TableWidget_weather.setItem(row,5,QWidgetItem(items["type"]))
 
+    #加载坐标轴
+    def load_echarts(self):
+
+
         #清空布局，重新载入图片
         if self.verticalLayout_3.count() > 0:
             self.verticalLayout_3.removeItem(self.verticalLayout_3.itemAt(0))
 
+        #echarts绘图
+        self.weather = QWebEngineView()
 
-        chart = QChart()
-        chart.setTitle("{}最高气温".format(city_select))
-        chart.setAnimationOptions(QChart.SeriesAnimations)
-        chart.legend().hide()
+        self.weather.load(QUrl("file:///" + "weather.html"))  # 注意格式，绝对路径 radar_layout.addWidget(radar_view)
 
-        line_series = QLineSeries()  # Using line charts for this example
-        line_series_2 = QLineSeries()  # Using line charts for this example
-        # x_values = [1, 2, 3, 4, 5, 6, 7]
-        # y_values = [1, 2, 4, 3, 1, 3, 5]
-        x_values = [i for i in range(1,16)]
-        y_values = high
-        # print(high)
-        # print(low)
+        # jscode = "showPiChart(1500,1500,1500,1500,1500,1500)"
+        # jscode = "weather({},{},{})".format(date_forecast,high,low)
+        # jscode = '''
+        # weather(['2023-07-15', '2023-07-16', '2023-07-17', '2023-07-18', '2023-07-19', '2023-07-20', '2023-07-21', '2023-07-22', '2023-07-23', '2023-07-24', '2023-07-25', '2023-07-26', '2023-07-27', '2023-07-28', '2023-07-29'],
+        #       [35.0, 33.0, 32.0, 33.0, 33.0, 34.0, 33.0, 34.0, 37.0, 35.0, 34.0, 32.0, 31.0, 35.0, 31.0],
+        #       [28.0, 28.0, 27.0, 27.0, 27.0, 28.0, 27.0, 27.0, 27.0, 28.0, 28.0, 28.0, 27.0, 28.0, 26.0])
+        # '''
 
-        for value in range(0, len(x_values)):
-            line_series.append(x_values[value], high[value])
-            line_series_2.append(x_values[value], low[value])
-        chart.addSeries(line_series)  # Add line series to chart instance
-        chart.addSeries(line_series_2)  # Add line series to chart instance
+        self.verticalLayout_3.addWidget(self.weather)
+
+        self.statusBar().showMessage("图像加载完毕")
 
 
-        axis_x = QValueAxis()
-        axis_x.setLabelFormat("%d")
-        chart.addAxis(axis_x, Qt.AlignBottom)
-        line_series.attachAxis(axis_x)
-        line_series_2.attachAxis(axis_x)
+    def changeWeather(self):
 
-        axis_y = QValueAxis()
-        axis_y.setLabelFormat("%d")
-        chart.addAxis(axis_y, Qt.AlignLeft)
-        line_series.attachAxis(axis_y)
-        line_series_2.attachAxis(axis_y)
+        self.label_19.setText("{}未来十五天气温走势图".format(self.ComboBox_2.currentText()))
+        if self.weather.page():
 
-        chart_view = QChartView(chart)
-        chart_view.setRenderHint(QPainter.Antialiasing)
+            # forecast = ['2023-07-15', '2023-07-16', '2023-07-17', '2023-07-18', '2023-07-19', '2023-07-20', '2023-07-21', '2023-07-22', '2023-07-23', '2023-07-24', '2023-07-25', '2023-07-26', '2023-07-27', '2023-07-28', '2023-07-29']
+            # high = [35.0, 33.0, 32.0, 33.0, 33.0, 34.0, 33.0, 34.0, 37.0, 35.0, 34.0, 32.0, 31.0, 35.0, 31.0]
+            # low = [28.0, 28.0, 27.0, 27.0, 27.0, 28.0, 27.0, 27.0, 27.0, 28.0, 28.0, 28.0, 27.0, 28.0, 26.0]
 
-        self.verticalLayout_3.addWidget(chart_view)
+
+            jscode = "weather({},{},{})".format(self.date_forecast,self.high,self.low)
+            self.weather.page().runJavaScript(jscode)
+
+        #QChart组件绘图
+        # chart = QChart()
+        # chart.setTitle("{}最高气温".format(city_select))
+        # chart.setAnimationOptions(QChart.SeriesAnimations)
+        # chart.legend().hide()
+        #
+        # line_series = QLineSeries()  # Using line charts for this example
+        # line_series_2 = QLineSeries()  # Using line charts for this example
+        # # x_values = [1, 2, 3, 4, 5, 6, 7]
+        # # y_values = [1, 2, 4, 3, 1, 3, 5]
+        # x_values = [i for i in range(1,16)]
+        # y_values = high
+        # # print(high)
+        # # print(low)
+        #
+        # for value in range(0, len(x_values)):
+        #     line_series.append(x_values[value], high[value])
+        #     line_series_2.append(x_values[value], low[value])
+        # chart.addSeries(line_series)  # Add line series to chart instance
+        # chart.addSeries(line_series_2)  # Add line series to chart instance
+        #
+        #
+        # axis_x = QValueAxis()
+        # axis_x.setLabelFormat("%d")
+        # chart.addAxis(axis_x, Qt.AlignBottom)
+        # line_series.attachAxis(axis_x)
+        # line_series_2.attachAxis(axis_x)
+        #
+        # axis_y = QValueAxis()
+        # axis_y.setLabelFormat("%d")
+        # chart.addAxis(axis_y, Qt.AlignLeft)
+        # line_series.attachAxis(axis_y)
+        # line_series_2.attachAxis(axis_y)
+        #
+        # chart_view = QChartView(chart)
+        # chart_view.setRenderHint(QPainter.Antialiasing)
+        #
+        # self.verticalLayout_3.addWidget(chart_view)
 
 
 

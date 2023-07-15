@@ -8,9 +8,10 @@ from PyQt5.QtCore import *
 from test001 import Ui_MainWindow
 from PyQt5.QtWebEngineWidgets import QWebEngineView
 import sys
+import codecs
 
-
-class Mainapp(QMainWindow, Ui_MainWindow):
+ui,_ = loadUiType("test001.ui")
+class Mainapp(QMainWindow, ui):
 
     signals = pyqtSignal()
     def __init__(self):
@@ -18,9 +19,32 @@ class Mainapp(QMainWindow, Ui_MainWindow):
         self.setupUi(self) # 构造界面
         self.ComboBox.addItems(["a","b","c"])
         self.ComboBox.currentIndexChanged.connect(self.test1)
+        self.add_echarts()
+        self.button_connect()
+
+    def button_connect(self):
+        self.pushButton.clicked.connect(self.showPi)
+
+    def add_echarts(self):
         self.chart = QWebEngineView()
-        self.verticalLayout = QVBoxLayout()
+        self.chart.load(QUrl("file:///"+"html/chart.html"))
         self.verticalLayout.addWidget(self.chart)
+
+    def showPi(self):
+        """
+        显示饼形图
+        """
+        food = 500
+        rent = 500
+        electricity = 500
+        traffic = 500
+        relationship = 500
+        taobao = 500
+        # 将微调框的数值赋值给变量
+        jscode = "showPiChart({}, {}, {}, {}, {}, {});".format(food, traffic, relationship, rent, electricity, taobao)
+        self.chart.page().runJavaScript(jscode)
+        # 加载运行JavaScript
+
 
 
     def test1(self):

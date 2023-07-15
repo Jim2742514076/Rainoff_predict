@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>weather</title>
+    <script src="echarts.js"></script>
+</head>
+<body>
+
+    <!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+    <div id="main" style="width: 800px;height:400px;" ></div>
+    <script type="text/javascript">
+      // 基于准备好的dom，初始化echarts实例
+      var myChart = echarts.init(document.getElementById('main'));
+
+      // 指定图表的配置项和数据
+      var option = {
+          tooltip: {
+              trigger: 'axis',
+              axisPointer: { type: 'cross' }
+          },
+          xAxis: {
+              type: 'category',
+              data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          },
+          legend:{},
+          yAxis: [
+              {
+                  type: 'value',
+                  axisLabel: {
+                      formatter: '{value} °C'
+                  }
+
+              },
+              {
+                  type:"value",
+                  axisLabel: {
+                      formatter: '{value} °C'
+                  }
+
+              }
+          ],
+          series: [
+              {
+                  name:"最低气温",
+                  data: [1],
+                  type: 'line'
+              },
+              {
+                  name:"最高气温",
+                  data: [1],
+                  type: 'line'
+              }
+          ]
+      };
+
+      function weather(varset,varH,varL){
+          myChart.showLoading();
+          if (option && typeof option === "object") {
+              option["xAxis"]["data"] = varset;
+              option["series"][0]["data"] = varH;
+              option["series"][1]["data"] = varL;
+              myChart.setOption(option, true);
+              myChart.hideLoading();
+              return null
+          };
+      };
+
+
+          // weather(['2023-07-15', '2023-07-16', '2023-07-17', '2023-07-18', '2023-07-19', '2023-07-20', '2023-07-21', '2023-07-22', '2023-07-23', '2023-07-24', '2023-07-25', '2023-07-26', '2023-07-27', '2023-07-28', '2023-07-29'],
+          //     [35.0, 33.0, 32.0, 33.0, 33.0, 34.0, 33.0, 34.0, 37.0, 35.0, 34.0, 32.0, 31.0, 35.0, 31.0],
+          //     [28.0, 28.0, 27.0, 27.0, 27.0, 28.0, 27.0, 27.0, 27.0, 28.0, 28.0, 28.0, 27.0, 28.0, 26.0])
+
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+    </script>
+
+</body>
+</html>

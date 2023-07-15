@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>593</height>
+    <width>1008</width>
+    <height>725</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="LineEdit" name="LineEdit">
     <property name="geometry">
      <rect>
-      <x>420</x>
-      <y>100</y>
+      <x>620</x>
+      <y>40</y>
       <width>128</width>
       <height>33</height>
      </rect>
@@ -27,8 +27,8 @@
    <widget class="ComboBox" name="ComboBox">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>140</y>
+      <x>130</x>
+      <y>30</y>
       <width>76</width>
       <height>32</height>
      </rect>
@@ -37,13 +37,30 @@
    <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>240</y>
-      <width>481</width>
-      <height>221</height>
+      <x>100</x>
+      <y>100</y>
+      <width>781</width>
+      <height>501</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout"/>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QWidget" name="widget" native="true"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>380</x>
+      <y>40</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>更改绘图</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -51,7 +68,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1008</width>
      <height>26</height>
     </rect>
    </property>
