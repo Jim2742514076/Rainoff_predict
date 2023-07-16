@@ -130,15 +130,68 @@
         </rect>
        </property>
       </widget>
-      <widget class="ProgressRing" name="ProgressRing">
+      <widget class="CardWidget" name="CardWidget">
        <property name="geometry">
         <rect>
-         <x>530</x>
-         <y>90</y>
-         <width>100</width>
-         <height>100</height>
+         <x>370</x>
+         <y>10</y>
+         <width>401</width>
+         <height>111</height>
         </rect>
        </property>
+       <widget class="RadioButton" name="RadioButton">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>70</y>
+          <width>113</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>坤坤</string>
+        </property>
+       </widget>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>10</y>
+          <width>371</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="CheckBox" name="CheckBox_4">
+           <property name="text">
+            <string>全选</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="CheckBox" name="CheckBox">
+           <property name="text">
+            <string>唱</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="CheckBox" name="CheckBox_2">
+           <property name="text">
+            <string>跳</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="CheckBox" name="CheckBox_3">
+           <property name="text">
+            <string>rap</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -158,19 +211,25 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>CheckBox</class>
+   <extends>QCheckBox</extends>
+   <header>qfluentwidgets</header>
+  </customwidget>
+  <customwidget>
    <class>PushButton</class>
    <extends>QPushButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
   <customwidget>
-   <class>ProgressBar</class>
-   <extends>QProgressBar</extends>
+   <class>RadioButton</class>
+   <extends>QRadioButton</extends>
    <header>qfluentwidgets</header>
   </customwidget>
   <customwidget>
-   <class>ProgressRing</class>
-   <extends>ProgressBar</extends>
+   <class>CardWidget</class>
+   <extends>QFrame</extends>
    <header>qfluentwidgets</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>TextEdit</class>

@@ -9,6 +9,7 @@ from PyQt5.uic import loadUiType
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 import sys
+import time
 
 ui,_ = loadUiType("./ui/对话框.ui")
 
@@ -22,14 +23,36 @@ class MainWindow(QMainWindow,ui):
     def handleui(self):
         self.load_txt()
 
+
     def handle_button(self):
         self.PushButton.clicked.connect(self.runQinputDialog)
         self.PushButton_2.clicked.connect(self.runQfontDialog)
         self.PushButton_3.clicked.connect(self.runQcolorDialog)
         self.PushButton_4.clicked.connect(self.runQfileDialog)
         self.PushButton_5.clicked.connect(self.runQprogressDialog)
+        self.PushButton_5.clicked.connect(self.runProgressBar)
+        self.CheckBox.stateChanged.connect(self.check_box_control)
+        self.CheckBox_4.stateChanged.connect(self.changecb1)
+        self.RadioButton.clicked.connect(self.kk_test)
 
+    def kk_test(self):
+        if self.RadioButton.isChecked():
+            self.TextEdit.setText("正是在下")
+        if not self.RadioButton.isChecked():
+            self.TextEdit.setText("")
+    def check_box_control(self):
+        if self.CheckBox.isChecked():
+            self.TextEdit.setText("你是坤哥吗？")
 
+    def changecb1(self):
+        if self.CheckBox_4.checkState() == Qt.Checked:
+            self.CheckBox_3.setChecked(True)
+            self.CheckBox_2.setChecked(True)
+            self.CheckBox.setChecked(True)
+        elif self.CheckBox_4.checkState() == Qt.Unchecked:
+            self.CheckBox_3.setChecked(False)
+            self.CheckBox_2.setChecked(False)
+            self.CheckBox.setChecked(False)
 
     def load_txt(self):
         with open("test.txt","r",encoding="utf-8") as f:
@@ -89,8 +112,15 @@ class MainWindow(QMainWindow,ui):
             progress.setValue(num)
             QMessageBox.information(self, "提示", "操作成功")
 
+    #进度条设置
+    def runProgressBar(self):
 
-
+        for i in range(1,11):
+            time.sleep(0.5)
+            self.ProgressRing.setValue(i*10)
+            self.progressBar.setValue(i*10)
+            self.ProgressBar.setValue(i*10)
+            print(i)
 
 
 def main():
